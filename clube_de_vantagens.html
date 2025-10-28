@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Declaração de Consentimento - Clube de Vantagens</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 900px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: white;
+        }
+
+        .tab-button:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.3s ease;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #e9ecef;
+            color: #333;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .btn-secondary:hover {
+            background: #dee2e6;
+        }
+
+        .btn-download {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-download:hover {
+            background: #218838;
+        }
+
+        .btn-send {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-send:hover {
+            background: #e0a800;
+        }
+
+        .btn-clear {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background: #c82333;
+        }
+
+        /* Estilo do Canvas de Assinatura */
+        .signature-canvas-container {
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background: #fafafa;
+            margin-bottom: 15px;
+        }
+
+        #signatureCanvas {
+            display: block;
+            cursor: crosshair;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            width: 100%;
+            height: 150px;
+        }
+
+        .canvas-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .canvas-buttons button {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+
+        .btn-clear-canvas {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-clear-canvas:hover {
+            background: #c82333;
+        }
+
+        /* Estilo do documento de declaração */
+        .declaration-document {
+            background: white;
+            padding: 40px;
+            border: 1px solid #ddd;
+            font-family: 'Times New Roman', serif;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .declaration-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .declaration-content {
+            text-align: justify;
+            margin-bottom: 30px;
+        }
+
+        .declaration-content p {
+            margin-bottom: 15px;
+        }
+
+        .signature-section {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .signature-block {
+            text-align: center;
+        }
+
+        .signature-image {
+            width: 100%;
+            max-width: 200px;
+            height: 100px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .signature-line {
+            border-top: 1px solid #333;
+            padding-top: 10px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+            border: 1px solid #c3e6cb;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+            border: 1px solid #f5c6cb;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 3px;
+            font-size: 13px;
+            color: #004085;
+        }
+
+        .print-button {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .print-button:hover {
+            background: #138496;
+        }
+
+        .declaration-fixed {
+            background: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 25px;
+            border-radius: 3px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .declaration-fixed strong {
+            color: #667eea;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('form')">Formulário</button>
+            <button class="tab-button" onclick="switchTab('preview')">Visualizar Declaração</button>
+        </div>
+
+        <!-- ABA 1: FORMULÁRIO -->
+        <div id="form" class="tab-content active">
+            <h2 style="margin-bottom: 20px; color: #333;">Preencha os Dados da Declaração</h2>
+            
+            <div class="info-box">
+                📝 Preencha todos os campos abaixo e assine digitalmente. Após concluir, você poderá visualizar, imprimir ou enviar a declaração por email.
+            </div>
+
+            <div class="success-message" id="successMessage">
+                ✓ Dados salvos com sucesso! Você pode visualizar a declaração na aba "Visualizar Declaração".
+            </div>
+
+            <div class="error-message" id="errorMessage">
+                ✗ Por favor, preencha todos os campos obrigatórios e assine a declaração.
+            </div>
+
+            <form id="declarationForm">
+                <!-- Declaração Fixa -->
+                <div class="declaration-fixed">
+                    <strong>Declaro que autorizo o Grupo Lima a divulgar o nome, logomarca e informações do meu estabelecimento no Clube de Vantagens, em meios físicos ou digitais.</strong>
+                </div>
+
+                <div class="form-group">
+                    <label for="nomeCompleto">Nome Completo *</label>
+                    <input type="text" id="nomeCompleto" name="nomeCompleto" placeholder="Ex: João da Silva" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nomeEmpresa">Nome da Empresa *</label>
+                    <input type="text" id="nomeEmpresa" name="nomeEmpresa" placeholder="Ex: Empresa XYZ LTDA" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cnpj">CNPJ *</label>
+                    <input type="text" id="cnpj" name="cnpj" placeholder="Ex: 12.345.678/0001-90" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="beneficio">Benefício/Desconto a Oferecer *</label>
+                    <textarea id="beneficio" name="beneficio" placeholder="Descreva o benefício ou desconto que será oferecido aos clientes do Clube de Vantagens" required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="local">Local *</label>
+                        <input type="text" id="local" name="local" placeholder="Ex: São Paulo, SP" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="data">Data *</label>
+                        <input type="text" id="data" name="data" placeholder="Ex: 28 de outubro de 2025" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Seu Email (para receber confirmação) *</label>
+                    <input type="email" id="email" name="email" placeholder="seu.email@exemplo.com" required>
+                </div>
+
+                <!-- Assinatura Digital -->
+                <div class="form-group">
+                    <label>Assinatura Digital *</label>
+                    <div class="signature-canvas-container">
+                        <canvas id="signatureCanvas"></canvas>
+                        <div class="canvas-buttons">
+                            <button type="button" class="btn-clear-canvas" onclick="clearSignature()">Limpar Assinatura</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn-primary" onclick="saveAndPreview()">Visualizar Declaração</button>
+                    <button type="reset" class="btn-secondary" onclick="resetForm()">Limpar Formulário</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- ABA 2: VISUALIZAÇÃO DA DECLARAÇÃO -->
+        <div id="preview" class="tab-content">
+            <h2 style="margin-bottom: 20px; color: #333;">Declaração de Consentimento</h2>
+
+            <div class="declaration-document" id="declarationDocument">
+                <div class="declaration-title">DECLARAÇÃO DE CONSENTIMENTO</div>
+                
+                <div class="declaration-content">
+                    <p><strong>Eu, <span id="preview-nome">_________________________________</span>, responsável legal pelo estabelecimento <span id="preview-empresa">_________________________________</span>, inscrito no CNPJ nº <span id="preview-cnpj">_______________________</span>,</strong> declaro que autorizo o Grupo Lima a divulgar o nome, logomarca e informações do meu estabelecimento no Clube de Vantagens, em meios físicos ou digitais.</p>
+
+                    <p>Concordo em oferecer aos clientes do Clube de Vantagens o benefício/desconto descrito abaixo:</p>
+
+                    <p style="margin-left: 20px; font-style: italic; border-left: 3px solid #ddd; padding-left: 15px;">
+                        <span id="preview-beneficio">_________________________________________________________________</span>
+                    </p>
+                </div>
+
+                <div class="signature-section">
+                    <div class="signature-block">
+                        <img id="signatureImagePreview" class="signature-image" src="" alt="Assinatura" style="display: none;">
+                        <div class="signature-line">
+                            <span id="preview-local">_______________________</span><br>
+                            Local e data
+                        </div>
+                    </div>
+                    <div class="signature-block">
+                        <img id="signatureImagePreview2" class="signature-image" src="" alt="Assinatura" style="display: none;">
+                        <div class="signature-line">
+                            ______________________________________<br>
+                            Assinatura
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group" style="margin-top: 30px;">
+                <button class="btn-primary" onclick="editForm()">← Voltar ao Formulário</button>
+                <button class="btn-download print-button" onclick="printDeclaration()">🖨️ Imprimir</button>
+                <button class="btn-send" id="sendEmailBtn" onclick="sendEmail()">📧 Enviar por Email</button>
+            </div>
+
+            <div class="loading" id="loadingIndicator">
+                <div class="spinner"></div>
+                <p style="margin-top: 10px;">Enviando formulário...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ IMPORTANTE: Substitua f/xpwopbjq pelo seu Form ID do Formspree
+        // Exemplo: 'f/a1b2c3d4e5f6'
+        const FORMSPREE_FORM_ID =f/xpwopbjq;
+
+        // Inicializar Canvas de Assinatura
+        const canvas = document.getElementById('signatureCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let hasSignature = false;
+
+        // Ajustar tamanho do canvas
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Eventos de desenho
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            ctx.lineTo(x, y);
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+            hasSignature = true;
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            isDrawing = false;
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            isDrawing = false;
+        });
+
+        // Suporte para touch (mobile)
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+            ctx.lineTo(x, y);
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+            hasSignature = true;
+        });
+
+        canvas.addEventListener('touchend', () => {
+            isDrawing = false;
+        });
+
+        // Limpar assinatura
+        function clearSignature() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hasSignature = false;
+        }
+
+        // Alternar entre abas
+        function switchTab(tabName) {
+            const contents = document.querySelectorAll('.tab-content');
+            const buttons = document.querySelectorAll('.tab-button');
+
+            contents.forEach(content => content.classList.remove('active'));
+            buttons.forEach(button => button.classList.remove('active'));
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Salvar dados e ir para visualização
+        function saveAndPreview() {
+            const form = document.getElementById('declarationForm');
+            
+            // Validar formulário
+            if (!form.checkValidity()) {
+                showError('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+
+            // Validar assinatura
+            if (!hasSignature) {
+                showError('Por favor, assine a declaração.');
+                return;
+            }
+
+            // Obter valores
+            const nomeCompleto = document.getElementById('nomeCompleto').value;
+            const nomeEmpresa = document.getElementById('nomeEmpresa').value;
+            const cnpj = document.getElementById('cnpj').value;
+            const beneficio = document.getElementById('beneficio').value;
+            const local = document.getElementById('local').value;
+            const data = document.getElementById('data').value;
+            const signatureImage = canvas.toDataURL('image/png');
+
+            // Atualizar visualização
+            document.getElementById('preview-nome').textContent = nomeCompleto;
+            document.getElementById('preview-empresa').textContent = nomeEmpresa;
+            document.getElementById('preview-cnpj').textContent = cnpj;
+            document.getElementById('preview-beneficio').textContent = beneficio;
+            document.getElementById('preview-local').textContent = local + ', ' + data;
+
+            // Mostrar assinatura na visualização
+            const signatureImg1 = document.getElementById('signatureImagePreview');
+            const signatureImg2 = document.getElementById('signatureImagePreview2');
+            signatureImg1.src = signatureImage;
+            signatureImg1.style.display = 'block';
+            signatureImg2.src = signatureImage;
+            signatureImg2.style.display = 'block';
+
+            // Salvar dados no localStorage para envio posterior
+            localStorage.setItem('declaracaoData', JSON.stringify({
+                nomeCompleto,
+                nomeEmpresa,
+                cnpj,
+                beneficio,
+                local,
+                data,
+                email: document.getElementById('email').value,
+                signatureImage
+            }));
+
+            // Ir para aba de visualização
+            document.getElementById('preview').classList.add('active');
+            document.getElementById('form').classList.remove('active');
+            document.querySelectorAll('.tab-button')[0].classList.remove('active');
+            document.querySelectorAll('.tab-button')[1].classList.add('active');
+
+            showSuccess('Dados salvos com sucesso!');
+        }
+
+        // Voltar ao formulário
+        function editForm() {
+            document.getElementById('form').classList.add('active');
+            document.getElementById('preview').classList.remove('active');
+            document.querySelectorAll('.tab-button')[0].classList.add('active');
+            document.querySelectorAll('.tab-button')[1].classList.remove('active');
+        }
+
+        // Resetar formulário
+        function resetForm() {
+            document.getElementById('declarationForm').reset();
+            clearSignature();
+        }
+
+        // Imprimir declaração
+        function printDeclaration() {
+            const printContent = document.getElementById('declarationDocument').innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = `
+                <html>
+                <head>
+                    <title>Declaração de Consentimento</title>
+                    <style>
+                        body { font-family: 'Times New Roman', serif; padding: 20px; }
+                        .declaration-document { padding: 40px; }
+                        .declaration-title { text-align: center; font-weight: bold; font-size: 18px; margin-bottom: 30px; text-transform: uppercase; }
+                        .declaration-content { text-align: justify; margin-bottom: 30px; line-height: 1.8; }
+                        .declaration-content p { margin-bottom: 15px; }
+                        .signature-section { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+                        .signature-block { text-align: center; }
+                        .signature-image { width: 100%; max-width: 200px; height: 100px; border: 1px solid #ddd; margin-bottom: 10px; display: block; }
+                        .signature-line { border-top: 1px solid #333; padding-top: 10px; text-align: center; font-size: 12px; }
+                    </style>
+                </head>
+                <body>
+                    ${printContent}
+                </body>
+                </html>
+            `;
+
+            window.print();
+            document.body.innerHTML = originalContent;
+            location.reload();
+        }
+
+        // Enviar por email via Formspree
+        function sendEmail() {
+            const data = JSON.parse(localStorage.getItem('declaracaoData'));
+            
+            if (!data) {
+                showError('Nenhum dado para enviar.');
+                return;
+            }
+
+            // Validar Form ID
+            if (FORMSPREE_FORM_ID === 'f/xpwopbjq') {
+                showError('❌ Erro: Form ID do Formspree não foi configurado. Por favor, atualize o arquivo com seu Form ID.');
+                return;
+            }
+
+            // Mostrar indicador de carregamento
+            document.getElementById('loadingIndicator').style.display = 'block';
+            document.getElementById('sendEmailBtn').disabled = true;
+
+            // Preparar dados para envio
+            const formData = new FormData();
+            formData.append('Nome Completo', data.nomeCompleto);
+            formData.append('Nome da Empresa', data.nomeEmpresa);
+            formData.append('CNPJ', data.cnpj);
+            formData.append('Benefício/Desconto', data.beneficio);
+            formData.append('Local', data.local);
+            formData.append('Data', data.data);
+            formData.append('Email do Cliente', data.email);
+            formData.append('Assinatura', data.signatureImage);
+            formData.append('_subject', 'Nova Declaração de Consentimento - Clube de Vantagens');
+
+            // Enviar para Formspree
+            fetch(`https://formspree.io/f/${FORMSPREE_FORM_ID}`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    showSuccess('✅ Declaração enviada com sucesso para rogerio.chaves@grupolima.net.br!');
+                    document.getElementById('loadingIndicator').style.display = 'none';
+                    document.getElementById('sendEmailBtn').disabled = false;
+                } else {
+                    throw new Error('Erro ao enviar formulário');
+                }
+            })
+            .catch(error => {
+                showError('❌ Erro ao enviar: ' + error.message);
+                document.getElementById('loadingIndicator').style.display = 'none';
+                document.getElementById('sendEmailBtn').disabled = false;
+            });
+        }
+
+        // Mostrar mensagem de sucesso
+        function showSuccess(message) {
+            const successMsg = document.getElementById('successMessage');
+            successMsg.textContent = message;
+            successMsg.classList.add('show');
+            setTimeout(() => {
+                successMsg.classList.remove('show');
+            }, 5000);
+        }
+
+        // Mostrar mensagem de erro
+        function showError(message) {
+            const errorMsg = document.getElementById('errorMessage');
+            errorMsg.textContent = message;
+            errorMsg.classList.add('show');
+            setTimeout(() => {
+                errorMsg.classList.remove('show');
+            }, 5000);
+        }
+
+        // Restaurar dados ao carregar a página
+        window.addEventListener('load', () => {
+            const savedData = localStorage.getItem('declaracaoData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                document.getElementById('nomeCompleto').value = data.nomeCompleto;
+                document.getElementById('nomeEmpresa').value = data.nomeEmpresa;
+                document.getElementById('cnpj').value = data.cnpj;
+                document.getElementById('beneficio').value = data.beneficio;
+                document.getElementById('local').value = data.local;
+                document.getElementById('data').value = data.data;
+                document.getElementById('email').value = data.email;
+            }
+        });
+    </script>
+</body>
+</html>
